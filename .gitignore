@@ -1,3 +1,19 @@
+# Custom files
+## macOS System Files
+.DS_Store
+
+## Training/Data Files
+RUNS/
+
+runs
+models
+logs
+*project*
+data_tiny/vgg
+runs_tiny
+video
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
