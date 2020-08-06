@@ -1,0 +1,7 @@
+# KITTI ROAD 2013 dataset
+data_road/
+
+vgg/
+gtFine_trainvaltest/
+
+vgg16.npy
