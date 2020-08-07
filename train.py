@@ -6,6 +6,7 @@ import numpy as np
 import helper
 from src.batch import gen_batch_function
 import tensorflow.contrib.slim as slim
+import time
 
 from src.fcn import FcnModel
 
@@ -57,6 +58,11 @@ def run():
 
     global_step = tf.Variable(0, dtype=tf.int32, trainable=False, name='global_step')
     train_op = tf.train.AdamOptimizer(lr_placeholder).minimize(fcn_model.loss_op, global_step)
+
+    print("\n**************************************\nTensorFlow detected the following GPU(s):")
+    tf.test.gpu_device_name()
+
+    print("Training start: {}".format(time.ctime()))
     
     with tf.Session() as sess:
         # Create function to get batches
@@ -106,7 +112,8 @@ def run():
  
         # OPTIONAL: Apply the trained model to a video
         # Run the model with the test images and save each painted output image (roads painted green)
-
+        
+    print("Training end: {}".format(time.ctime()))
 
 if __name__ == '__main__':
     run()

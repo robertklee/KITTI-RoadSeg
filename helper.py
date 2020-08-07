@@ -5,7 +5,8 @@ import shutil
 import time
 import tensorflow as tf
 from glob import glob
-
+from PIL import Image
+import cv2
 
 def gen_test_output(sess, logits, is_training, image_pl, data_folder, image_shape):
     """
@@ -19,7 +20,8 @@ def gen_test_output(sess, logits, is_training, image_pl, data_folder, image_shap
     :return: Output for for each test image
     """
     for image_file in glob(os.path.join(data_folder, 'image_2', '*.png')):
-        image = scipy.misc.imresize(scipy.misc.imread(image_file), image_shape)
+        img = cv2.imread(image_file)
+        image = np.array(Image.fromarray(img).resize((image_shape[1], image_shape[0]), Image.BILINEAR)).astype(np.double)
 
         im_softmax = sess.run(
             [tf.nn.softmax(logits)],
@@ -27,7 +29,7 @@ def gen_test_output(sess, logits, is_training, image_pl, data_folder, image_shap
         im_softmax = im_softmax[0][:, 1].reshape(image_shape[0], image_shape[1])
         segmentation = (im_softmax > 0.5).reshape(image_shape[0], image_shape[1], 1)
         mask = np.dot(segmentation, np.array([[0, 255, 0, 127]]))
-        mask = scipy.misc.toimage(mask, mode="RGBA")
+        mask = Image.fromarray(mask.astype(np.uint8))
         street_im = scipy.misc.toimage(image)
         street_im.paste(mask, box=None, mask=mask)
 
