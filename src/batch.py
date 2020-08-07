@@ -6,6 +6,8 @@ import os
 import re
 import random
 from glob import glob
+from PIL import Image
+import cv2
 
 def gen_batch_function(data_folder, image_shape):
     """
@@ -32,9 +34,11 @@ def gen_batch_function(data_folder, image_shape):
             gt_images = []
             for image_file in image_paths[batch_i:batch_i+batch_size]:
                 gt_image_file = label_paths[os.path.basename(image_file)]
-
-                image = scipy.misc.imresize(scipy.misc.imread(image_file), image_shape)
-                gt_image = scipy.misc.imresize(scipy.misc.imread(gt_image_file), image_shape)
+                
+                img = cv2.imread(image_file)
+                image = np.array(Image.fromarray(img).resize((image_shape[1], image_shape[0]), Image.BILINEAR)).astype(np.double)
+                gt_img = cv2.imread(gt_image_file)
+                gt_image = np.array(Image.fromarray(gt_img).resize((image_shape[1], image_shape[0]), Image.BILINEAR)).astype(np.double)
 
                 gt_bg = np.all(gt_image == road_color, axis=2)
                 gt_bg = gt_bg.reshape(*gt_bg.shape, 1)
