@@ -62,7 +62,7 @@ def run():
     print("\n**************************************\nTensorFlow detected the following GPU(s):")
     tf.test.gpu_device_name()
 
-    print("Training start: {}".format(time.ctime()))
+    print("\n\nTraining start: {}\n".format(time.ctime()))
     
     with tf.Session() as sess:
         # Create function to get batches
@@ -105,15 +105,13 @@ def run():
 #             loss_value, acc, iou = sess.run([fcn_model.loss_op, fcn_model.accuracy_op, fcn_model.iou_op], feed_dict = feed)
 #             print("    loss: {:.3f}, accuracy: {:.3f}, iou: {:.3f}".format(loss_value, acc, iou))
         ###############################################################################################        
-        
+        print("\n\nTraining end: {}".format(time.ctime()))
         # TODO: Save inference data using helper.save_inference_samples
         logits = tf.reshape(fcn_model.inference_op, (-1, num_classes))
         helper.save_inference_samples(args.runs, args.dataset, sess, image_shape, logits, is_train_placeholder, x_placeholder)
  
         # OPTIONAL: Apply the trained model to a video
         # Run the model with the test images and save each painted output image (roads painted green)
-        
-    print("Training end: {}".format(time.ctime()))
 
 if __name__ == '__main__':
     run()

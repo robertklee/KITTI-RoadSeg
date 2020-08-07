@@ -30,7 +30,7 @@ def gen_test_output(sess, logits, is_training, image_pl, data_folder, image_shap
         segmentation = (im_softmax > 0.5).reshape(image_shape[0], image_shape[1], 1)
         mask = np.dot(segmentation, np.array([[0, 255, 0, 127]]))
         mask = Image.fromarray(mask.astype(np.uint8))
-        street_im = scipy.misc.toimage(image)
+        street_im = Image.fromarray(image.astype(np.uint8))
         street_im.paste(mask, box=None, mask=mask)
 
         yield os.path.basename(image_file), np.array(street_im)
@@ -48,4 +48,6 @@ def save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, is_tra
     image_outputs = gen_test_output(
         sess, logits, is_training, input_image, os.path.join(data_dir, 'data_road/training'), image_shape)
     for name, image in image_outputs:
-        scipy.misc.imsave(os.path.join(output_dir, name), image)
+        img = Image.fromarray(image.astype(np.uint8))
+        img.save(os.path.join(output_dir, name))
+        # scipy.misc.imsave(os.path.join(output_dir, name), image)
