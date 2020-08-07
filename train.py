@@ -61,6 +61,7 @@ def run():
 
     print("\n**************************************\nTensorFlow detected the following GPU(s):")
     tf.test.gpu_device_name()
+    print("\n\n")
 
     print("\n\nTraining start: {}\n".format(time.ctime()))
     
