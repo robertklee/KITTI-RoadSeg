@@ -87,7 +87,9 @@ class segmentationGenerator(keras.utils.Sequence):
             
             # remove red from output
             seg_road = seg_orig
-            seg_road[:,:,2] = np.zeros([seg_road.shape[0], seg_road.shape[1]])
+            # seg_road[:,:,2] = np.zeros([seg_road.shape[0], seg_road.shape[1]])
+            seg_road[:,:,2] = seg_road[:,:,0]
+            seg_road[:,:,1] = seg_road[:,:,0]
 
             if (seg_orig is None):
                 print("Error in seg path: " + seg_path)
