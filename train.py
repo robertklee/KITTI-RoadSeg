@@ -22,7 +22,7 @@ print("\n\nSetup start: {}\n".format(time.ctime()))
 # define these
 batchSize = 12
 trainingRunTime = time.ctime().replace(':', '_')
-resnet_type = 50
+resnet_type = 18
 Notes = 'KITTI_Road'
 
 # build loss
@@ -35,7 +35,7 @@ test_generator = segmentationGenerator('data/data_road/training/image_2','data/d
 
 # build model
 model = create_Model(input_shape=(640,192,3), encoder_type=resnet_type)
-model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=['accuracy'])
+model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=[loss, 'accuracy'])
 
 # callbacks
 if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/'):
