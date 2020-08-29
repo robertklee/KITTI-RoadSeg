@@ -51,6 +51,6 @@ lr = LearningRateScheduler(schedule=lr_schedule,verbose=1)
 
 print("\n\nTraining start: {}\n".format(time.ctime()))
 
-model.fit_generator(train_generator, epochs = 20, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
+model.fit_generator(train_generator, epochs = 50, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
 
 print("\n\nTraining end: {}\n".format(time.ctime()))
