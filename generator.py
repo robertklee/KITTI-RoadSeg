@@ -96,12 +96,12 @@ class segmentationGenerator(keras.utils.Sequence):
             img = cv2.resize(img_orig, dsize=self.image_size)
             seg = cv2.resize(seg_road, dsize=self.image_size)
             
-            print(img.shape)
-            cv2.imshow('test', img)
-            cv2.waitKey(-1)
-            print(seg.shape)
-            cv2.imshow('test', seg)
-            cv2.waitKey(-1)
+            # print(img.shape)
+            # cv2.imshow('test', img)
+            # cv2.waitKey(-1)
+            # print(seg.shape)
+            # cv2.imshow('test', seg)
+            # cv2.waitKey(-1)
             
             if self.augmentations:
                 randomVals = []
