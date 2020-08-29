@@ -75,8 +75,15 @@ class segmentationGenerator(keras.utils.Sequence):
         imageNames = self.inputs[index*self.batch_size:(index+1)*self.batch_size]
 
         for _, imageNameSet in enumerate(imageNames):
-            img_orig = cv2.imread(os.path.join(self.img_dir, imageNameSet[0]))
-            seg_orig = cv2.imread(os.path.join(self.seg_dir, imageNameSet[0].replace('_', '_road_')))
+            img_path = os.path.join(self.img_dir, imageNameSet[0])
+            seg_path = os.path.join(self.seg_dir, imageNameSet[0].replace('_', '_road_'))
+
+            img_orig = cv2.imread(img_path)
+            seg_orig = cv2.imread(seg_path)
+
+            if (seg_orig is None):
+                print("Error in seg path: " + seg_path)
+                continue
 
             img = cv2.resize(img_orig, dsize=self.image_size)
             seg = cv2.resize(seg_orig, dsize=self.image_size)
@@ -116,6 +123,9 @@ class segmentationGenerator(keras.utils.Sequence):
         #print("")
         imgs = os.listdir(self.img_dir)
         imgs.sort()
+
+        segs = os.listdir(self.seg_dir)
+        segs.sort()
 
         systemFiles = '.DS_Store'
         
