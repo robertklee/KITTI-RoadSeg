@@ -1,7 +1,6 @@
 import keras
 import keras.backend as K
 import tensorflow as tf
-import config
 
 
 def findGradients(y_predicted, leftImgPyramid):
