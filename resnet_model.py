@@ -184,22 +184,22 @@ def buildDecoder(inputLayer, scale_1, scale_2, scale_3, outputChannels=1):
     x = Conv2D(64, kernel_size=3, strides=1, data_format='channels_last' ,padding='same', name="EndingConvBlock2", activation='relu')(x)
     x = Conv2D(outputChannels, kernel_size=3, strides=1, data_format='channels_last' ,padding='same', name="OutputConvBlock", activation='sigmoid')(x)
     
-    return concatenate([x, scale_1_out, scale_2_out], axis=3), scale_1_out, scale_2_out
+    return x #concatenate([x, scale_1_out, scale_2_out], axis=3), scale_1_out, scale_2_out
 
 
 def create_Model(input_shape=constants.input_shape, encoder_type=50):
     if encoder_type == 50:
         inputLayer, outputLayer, scaleLayers = ResNet50(input_shape=constants.input_shape,include_top=False, create_encoder=True)
-        networkOuput, scale_1_out, scale_2_out = buildDecoder(outputLayer, scaleLayers[2], scaleLayers[1], scaleLayers[0], 1)
-        model = Model(inputs=[inputLayer], outputs=[networkOuput])#, scale_1_out, scale_2_out, scale_3_out])
-        model.load_weights(constants.resnet_50_model_path, by_name=True)
-        model.summary()
+        modelPath = constants.resnet_50_model_path
+        
     if encoder_type == 18:
         inputLayer, outputLayer, scaleLayers = ResNet18(input_shape=constants.input_shape,include_top=False, create_encoder=True)
-        networkOuput, scale_1_out, scale_2_out = buildDecoder(outputLayer, scaleLayers[2], scaleLayers[1], scaleLayers[0], 1)
-        model = Model(inputs=[inputLayer], outputs=[networkOuput])#, scale_1_out, scale_2_out, scale_3_out])
-        model.load_weights(constants.resnet_18_model_path, by_name=True)
-        model.summary()
+        modelPath = constants.resnet_18_model_path
+    
+    networkOutput = buildDecoder(outputLayer, scaleLayers[2], scaleLayers[1], scaleLayers[0], 1)
+    model = Model(inputs=[inputLayer], outputs=[networkOutput])#, scale_1_out, scale_2_out, scale_3_out])
+    model.load_weights(modelPath, by_name=True)
+    model.summary()
     return model
 
 if __name__ == "__main__":    

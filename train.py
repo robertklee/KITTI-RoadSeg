@@ -32,7 +32,7 @@ loss = lossClass.applyLoss
 
 # build data generators
 train_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=batchSize, shuffle=True)
-test_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=batchSize, shuffle=True)
+test_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=batchSize, shuffle=True, test=True)
 
 # build model
 model = create_Model(input_shape=(640,192,3), encoder_type=resnet_type)
@@ -57,6 +57,6 @@ lr = LearningRateScheduler(schedule=lr_schedule,verbose=1)
 
 print("\n\nTraining start: {}\n".format(time.ctime()))
 
-model.fit_generator(train_generator, epochs = 50, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
+model.fit_generator(train_generator, epochs = 20, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
 
 print("\n\nTraining end: {}\n".format(time.ctime()))
