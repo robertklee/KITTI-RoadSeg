@@ -33,7 +33,7 @@ train_generator = segmentationGenerator('data/data_road/training/image_2','data/
 test_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=batchSize, shuffle=True)
 
 # build model
-model = create_Model(input_shape=(640,192,3), encoder_type=18)
+model = create_Model(input_shape=(640,192,3), encoder_type=50)
 model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=['accuracy'])
 
 # callbacks
