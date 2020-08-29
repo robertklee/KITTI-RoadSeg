@@ -8,10 +8,16 @@ import keras.backend as K
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, TensorBoard,LearningRateScheduler
 from keras.utils import multi_gpu_model
+import time
 
 from resnet_model import create_Model
 # from lossFunctions import monoDepthV2Loss
 from generator import segmentationGenerator
+
+print("**************************************\nTensorFlow detected the following GPU(s):")
+tf.test.gpu_device_name()
+
+print("\n\nSetup start: {}\n".format(time.ctime()))
 
 # define these
 batchSize = 12
@@ -43,4 +49,8 @@ def lr_schedule(epoch):
 
 lr = LearningRateScheduler(schedule=lr_schedule,verbose=1)
 
+print("\n\nTraining start: {}\n".format(time.ctime()))
+
 model.fit_generator(train_generator, epochs = 20, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
+
+print("\n\nTraining end: {}\n".format(time.ctime()))
