@@ -184,7 +184,7 @@ def buildDecoder(inputLayer, scale_1, scale_2, scale_3, outputChannels=1):
     x = Conv2D(64, kernel_size=3, strides=1, data_format='channels_last' ,padding='same', name="EndingConvBlock2", activation='relu')(x)
     x = Conv2D(outputChannels, kernel_size=3, strides=1, data_format='channels_last' ,padding='same', name="OutputConvBlock", activation='sigmoid')(x)
     
-    return x #concatenate([x, scale_1_out, scale_2_out], axis=3), scale_1_out, scale_2_out
+    return concatenate([x, scale_1_out, scale_2_out], axis=3), scale_1_out, scale_2_out
 
 
 def create_Model(input_shape=constants.input_shape, encoder_type=50):
@@ -196,7 +196,7 @@ def create_Model(input_shape=constants.input_shape, encoder_type=50):
         inputLayer, outputLayer, scaleLayers = ResNet18(input_shape=constants.input_shape,include_top=False, create_encoder=True)
         modelPath = constants.resnet_18_model_path
     
-    networkOutput = buildDecoder(outputLayer, scaleLayers[2], scaleLayers[1], scaleLayers[0], 1)
+    networkOutput, scale_1_out, scale_2_out = buildDecoder(outputLayer, scaleLayers[2], scaleLayers[1], scaleLayers[0], 1)
     model = Model(inputs=[inputLayer], outputs=[networkOutput])#, scale_1_out, scale_2_out, scale_3_out])
     model.load_weights(modelPath, by_name=True)
     model.summary()
