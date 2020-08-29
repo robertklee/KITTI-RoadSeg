@@ -96,6 +96,7 @@ def run():
             if total_loss_value < best_loss:
                 saver.save(sess, "models/model.ckpt")
                 print("    best model update!!!")
+                best_loss = total_loss_value
                         
             
 #             feed = {x_placeholder: images,
