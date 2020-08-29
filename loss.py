@@ -1,7 +1,6 @@
 import keras
 import keras.backend as K
 import tensorflow as tf
-import config
 
 
 def findGradients(y_predicted, leftImgPyramid):
@@ -155,7 +154,19 @@ def photoMetric(disp, left, right, width, height, batchsize):
     return L1Direct, L1Reproject, SSIM_right_reproject, SSIM_right_left
 
 
-class monoDepthV2Loss():
+smooth = 1.
+
+def dice_coef(y_true, y_pred):
+    y_true_f = K.flatten(y_true)
+    y_pred_f = K.flatten(y_pred)
+    intersection = K.sum(y_true_f * y_pred_f)
+    return (2. * intersection + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
+
+
+def dice_coef_loss(y_true, y_pred):
+    return -dice_coef(y_true, y_pred)
+
+class modelLoss():
     def __init__(self, lambda_, alpha, width, height, batchsize):
         self.lambda_ = lambda_
         self.width = width
@@ -188,10 +199,8 @@ class monoDepthV2Loss():
         using mu mask as defined in paper works poorly due to our samples being so seperated in time
 
         '''
-        L_p = self.fullReprojection(y_true, y_pred)
-        L_s = self.fullSmoothnessLoss(y_true, y_pred)
 
-        return L_p + L_s * self.lambda_
+        return dice_coef_loss(y_true, y_pred)
         #return L_p
 
 
