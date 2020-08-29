@@ -22,7 +22,7 @@ print("\n\nSetup start: {}\n".format(time.ctime()))
 # define these
 batchSize = 12
 trainingRunTime = time.ctime().replace(':', '_')
-resnet_type = 18
+resnet_type = 50
 Notes = 'KITTI_Road'
 
 # build loss
