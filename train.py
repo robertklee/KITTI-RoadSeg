@@ -21,8 +21,7 @@ print("\n\nSetup start: {}\n".format(time.ctime()))
 
 # define these
 batchSize = 12
-trainingRunDate = '2020_08_20'
-trainingRunTime = '12_10_PM'
+trainingRunTime = time.ctime().replace(':', '_')
 resnet_type = 50
 Notes = 'KITTI_Road'
 
@@ -39,12 +38,12 @@ model = create_Model(input_shape=(640,192,3), encoder_type=resnet_type)
 model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=['accuracy'])
 
 # callbacks
-if not os.path.exists('models/' + Notes + '_' + trainingRunDate + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/'):
-    os.makedirs('models/' + Notes + '_' + trainingRunDate + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/')
-mc = ModelCheckpoint('models/' + Notes + '_' + trainingRunDate + '_' + trainingRunTime +  '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='val_loss')
-mc1 = ModelCheckpoint('models/' + Notes + '_' + trainingRunDate + '_' + trainingRunTime +  '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='loss')
+if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/'):
+    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/')
+mc = ModelCheckpoint('models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='val_loss')
+mc1 = ModelCheckpoint('models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='loss')
 rl = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=2, verbose=1) # not used
-tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunDate + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type), update_freq=250)
+tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type), update_freq=250)
 
 # Schedule Learning rate Callback
 def lr_schedule(epoch):
