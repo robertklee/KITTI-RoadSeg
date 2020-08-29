@@ -46,7 +46,7 @@ def load_vgg_ckpt(sess, ckpt='ckpts/vgg_16.ckpt'):
 
 
 def run():
-    image_shape = (160, 576)
+    image_shape = (224, 741)
     num_classes = 2
     args = argparser.parse_args()
 
