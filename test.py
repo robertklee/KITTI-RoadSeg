@@ -63,14 +63,14 @@ args = argparser.parse_args()
 
 args.visualize = args.visualize == '1' or args.visualize == 'True'
 
-output_img_path = os.path.join(output_img_base_dir, args.session)
+output_img_path = os.path.join(output_img_base_dir, args.session, str(args.epoch))
 model_path = os.path.join(model_base_dir, args.session)
 
 def get_model_name_from_epoch(src, epoch):
     models = os.listdir(src)
 
     for modelName in models:
-        if (model_epoch_base + str(epoch)) in modelName:
+        if (model_epoch_base + str(args.epoch)) in modelName:
             return modelName
     
     return None
