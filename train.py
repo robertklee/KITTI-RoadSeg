@@ -95,10 +95,11 @@ def lr_schedule(epoch):
 
 lr = LearningRateScheduler(schedule=lr_schedule,verbose=1)
 
+print("Model saved to:")
+print(modelSavePath)
+
 print("\n\nTraining start: {}\n".format(time.ctime()))
 
 model.fit_generator(train_generator, epochs=args.epochs, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
 
 print("\n\nTraining end: {}\n".format(time.ctime()))
-print("Model saved to:")
-print(modelSavePath)
