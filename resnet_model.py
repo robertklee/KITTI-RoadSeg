@@ -215,7 +215,7 @@ def unet(f4, f3, f2, f1, output_height, output_width, l1_skip_conn=True, n_class
 
     o = (UpSampling2D((4,4), data_format=IMAGE_ORDERING))(o)
 
-    o = (Reshape((output_height*output_width, -1)))(o)
+    # o = (Reshape((output_height*output_width, -1)))(o)
 
     o = (Activation('softmax'))(o)
 
