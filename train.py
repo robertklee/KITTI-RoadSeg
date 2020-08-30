@@ -48,8 +48,11 @@ argparser.add_argument('-r',
                        default=resnet_type,
                        help='resnet type')
 
-
+# convert string arguments to appropriate type
 args = argparser.parse_args()
+args.epochs = int(args.epochs)
+args.batch = int(args.batch)
+args.resnet = int(args.resnet)
 
 print("**************************************\nTensorFlow detected the following GPU(s):")
 tf.test.gpu_device_name()
