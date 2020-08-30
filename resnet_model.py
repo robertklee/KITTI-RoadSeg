@@ -135,8 +135,6 @@ def ResNetOuputStage(inputLayer, pools=1000):
     return output
 
 def buildDecoder(inputLayer, scale_1, scale_2, scale_3, outputChannels=1):
-    pass
-
     x = Conv2D(1024, kernel_size=3, strides=1, data_format='channels_last',padding='same', name="DecoderConv_Block_1_1", activation='relu')(inputLayer)
     x = Conv2D(1024, kernel_size=3, strides=1, data_format='channels_last',padding='same', name="DecoderConv_Block_1_2", activation='relu')(x)
 
