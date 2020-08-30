@@ -16,6 +16,7 @@ from generator import segmentationGenerator
 import constants
 import argparse
 from helpers import make_overlay
+import re
 
 
 '''
@@ -75,8 +76,10 @@ model_path = os.path.join(model_base_dir, args.session)
 def get_model_name_from_epoch(src, epoch):
     models = os.listdir(src)
 
+    pattern = re.compile(model_epoch_base + "[0]*" + str(args.epoch))
+
     for modelName in models:
-        if (model_epoch_base + str(args.epoch)) in modelName:
+        if pattern.search(modelName):
             return modelName
     
     return None
