@@ -1,6 +1,6 @@
 Keras==2.2.4
 tensorboard==1.13.1
-tensorflow==1.13.1
+tensorflow==1.15.2
 tensorflow-estimator==1.13.0
 tensorflow-gpu==1.13.1
 opencv-contrib-python==4.1.0.25
