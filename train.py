@@ -10,6 +10,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, TensorBoard,Lear
 from keras.utils import multi_gpu_model
 import time
 import argparse
+import constants
 
 from resnet_model import create_Model
 from loss import modelLoss
@@ -62,7 +63,10 @@ print("\n\nSetup start: {}\n".format(time.ctime()))
 # define these
 trainingRunTime = time.ctime().replace(':', '_')
 
-Notes = 'KITTI_Road'
+if constants.use_unet:
+    Notes = 'KITTI_Road_UNet'
+else:
+    Notes = 'KITTI_Road'
 
 # build loss
 lossClass = modelLoss(0.001,0.85,640,192,args.batch)

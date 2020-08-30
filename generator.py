@@ -3,6 +3,7 @@ import os
 import random
 import numpy as np
 import cv2
+import constants
 
 # TODO use imgaug for more robust image augmentation
 def preprocess_input(image, randomVals):
@@ -72,7 +73,10 @@ class segmentationGenerator(keras.utils.Sequence):
     def __getitem__(self, index):
         '''Generate one batch of data'''
         outX  =  np.empty((self.batch_size,  *self.image_size, 3))
-        outY  =  np.empty((self.batch_size,  *self.image_size, 3))
+        if constants.use_unet:
+            outY  =  np.empty((self.batch_size,  *self.image_size, 2))
+        else:
+            outY  =  np.empty((self.batch_size,  *self.image_size, 3))
         outY_0 = np.empty((self.batch_size, *self.image_size, 3))
         outY_1 = np.empty((self.batch_size, *self.image_size, 3))
 
@@ -88,8 +92,12 @@ class segmentationGenerator(keras.utils.Sequence):
             # remove red from output
             seg_road = seg_orig
             # seg_road[:,:,2] = np.zeros([seg_road.shape[0], seg_road.shape[1]])
-            seg_road[:,:,2] = seg_road[:,:,0]
-            seg_road[:,:,1] = seg_road[:,:,0]
+            if constants.use_unet:
+                seg_road[:,:,1] = 255-seg_road[:,:,0]
+                seg_road[:,:,2] = np.zeros([seg_road.shape[0], seg_road.shape[1]])
+            else:
+                seg_road[:,:,2] = seg_road[:,:,0]
+                seg_road[:,:,1] = seg_road[:,:,0]
 
             if (seg_orig is None):
                 print("Error in seg path: " + seg_path)
@@ -116,7 +124,12 @@ class segmentationGenerator(keras.utils.Sequence):
             outX[_]   =  np.transpose(img_augmented, axes=[1,0,2])
             # outY_0[_] =  np.transpose(img,           axes=[1,0,2])
             # outY_1[_] =  np.transpose(seg,           axes=[1,0,2])
-            outY[_] =  np.transpose(seg,           axes=[1,0,2])
+
+            if constants.use_unet:
+                two_seg = seg[:,:,0:2]
+                outY[_] = np.transpose(two_seg, axes=[1,0,2])
+            else:
+                outY[_] =  np.transpose(seg,           axes=[1,0,2])
 
             #test_out = outX[_].astype('uint8')#np.transpose(left_augmented,     axes=[1,0,2])
             #cv2.imshow('test', test_out)
