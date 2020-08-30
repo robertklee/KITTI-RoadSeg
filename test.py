@@ -15,6 +15,7 @@ from loss import modelLoss
 from generator import segmentationGenerator
 import constants
 import argparse
+from helpers import make_overlay
 
 
 '''
@@ -29,9 +30,9 @@ evaluation metrics for generated output
 
 argparser = argparse.ArgumentParser(description='Testing')
 
-model_epoch_number = 20#16
+model_epoch_number = 14#16
 resnet_type = 18
-session_id = 'KITTI_resnet_18_4pm'
+session_id = 'KITTI_Road_2020_08_20_batchsize_12'
 batchSize = 1
 model_epoch_base = '_weights_epoch'
 output_img_base_dir = 'output'
@@ -61,7 +62,7 @@ argparser.add_argument('-v',
 
 args = argparser.parse_args()
 
-args.visualize = args.visualize == '1' or args.visualize == 'True'
+args.visualize = args.visualize == '1' or args.visualize.lower() == 'true'
 
 output_img_path = os.path.join(output_img_base_dir, args.session, str(args.epoch))
 model_path = os.path.join(model_base_dir, args.session)
@@ -107,9 +108,10 @@ def evaluateModel(model,batchSize, visualize):
     imageName = random.choice(imageList)
     inputImg = cv2.imread('data/data_road/testing/image_2/' + imageName)
     rawImage = cv2.resize(inputImg, (640,192))
-    inputImg  = np.transpose(cv2.resize(cv2.imread('data/data_road/testing/image_2/' + imageName), (640,192)).astype('float32'),      axes=[1,0,2])
+    inputImgOrig  = cv2.resize(cv2.imread('data/data_road/testing/image_2/' + imageName), (640,192))
+    inputImg  = np.transpose(inputImgOrig.astype('float32'), axes=[1,0,2])
     output = model.predict(np.expand_dims(inputImg,0))# * 640 * 0.3
-    def displayOutput(output):
+    def displayOutput(output, dim=0):
         output = np.squeeze(output)
         outputTransformed = np.transpose(  output,    axes=[1,0,2])
         outputTransformed = outputTransformed - np.mean(outputTransformed)
@@ -118,11 +120,15 @@ def evaluateModel(model,batchSize, visualize):
         outputTransformed = np.clip(outputTransformed / np.max(outputTransformed) * 255, 0, 255).astype('uint8')
         return outputTransformed
 
-    outputDisplay = displayOutput(output)
+    outputDisplay = displayOutput(output, 2)
+
+    overlayedImage = cv2.addWeighted(inputImgOrig, 0.8, outputDisplay, 0.2, 0)
 
     if visualize:
         cv2.imshow("Input Image", rawImage)
         cv2.imshow("Segmentation Prediction",  outputDisplay)
+        cv2.imshow("Segmentation Overlay",  overlayedImage)
+
 
         #cv2.imwrite("../Images/InputImages.png",  rawImage )
         #cv2.imwrite("../Images/SegmentationPrediction.png",  outputDisplay )
@@ -135,11 +141,17 @@ def evaluateModel(model,batchSize, visualize):
     for filename in os.listdir('data/data_road/testing/image_2/'):
         if filename == '.DS_Store':
             continue
-        inputImg    = np.transpose(cv2.resize(cv2.imread('data/data_road/testing/image_2/' + filename), (640,192)).astype('float32'),      axes=[1,0,2])
+        inputImgOrig    = cv2.resize(cv2.imread('data/data_road/testing/image_2/' + filename), (640,192))
+        inputImg    = np.transpose(inputImgOrig.astype('float32'),      axes=[1,0,2])
         output = model.predict(np.expand_dims(inputImg,0)) #* 640 * 0.3
         count += 1
         outputTransformed = displayOutput(output)
+
+        overlayedImage = cv2.addWeighted(inputImgOrig, 0.8, outputTransformed, 0.2, 0)
+
         cv2.imwrite(os.path.join(output_img_path, filename),  outputTransformed )
+        cv2.imwrite(os.path.join(output_img_path, "overlay_" + filename),  overlayedImage )
+
         print(count, " of ", len(imgs) , end='\r')
     print("Mean ARD: ", ARD / count)
     print("Mean SQR: ", SQR / count)
