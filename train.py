@@ -80,15 +80,15 @@ test_generator = segmentationGenerator('data/data_road/training/image_2','data/d
 model = create_Model(input_shape=(640,192,3), encoder_type=args.resnet)
 model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=[loss, 'accuracy'])
 
-modelSavePath = 'models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5'
+modelSavePath = 'models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5'
 
 # callbacks
-if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type) + '/'):
-    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type) + '/')
+if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet) + '/'):
+    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet) + '/')
 mc = ModelCheckpoint(modelSavePath, monitor='val_loss')
 mc1 = ModelCheckpoint(modelSavePath, monitor='loss')
 rl = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=2, verbose=1) # not used
-tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type), update_freq=250)
+tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet), update_freq=250)
 
 # Schedule Learning rate Callback
 def lr_schedule(epoch):
