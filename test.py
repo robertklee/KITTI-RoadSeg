@@ -73,7 +73,10 @@ args.epochs = int(args.epoch)
 args.batch = int(args.batch)
 args.resnet = int(args.resnet)
 
-output_img_path = os.path.join(output_img_base_dir, args.session, str(args.epoch))
+src_type = 'test'
+eval_image_input_path = 'data/data_road/{}ing/image_2/'.format(src_type)
+
+output_img_path = os.path.join(output_img_base_dir, args.session, str(args.epoch), src_type)
 model_path = os.path.join(model_base_dir, args.session)
 
 def get_model_name_from_epoch(src, epoch):
@@ -110,6 +113,9 @@ def modelPredictWrapper(model, inputImg):
         # change from (1, 640, 192, 2) to (1, 640, 192, 3)
         zeros = np.zeros([modelOutput.shape[0], modelOutput.shape[1], modelOutput.shape[2], 1])
         modelOutput = np.concatenate((modelOutput, zeros), axis=3)
+        
+        # change order of channels
+        # modelOutput[:,:,:,[0,1,2]] = modelOutput[:,:,:,[1,2,0]]
     
     return modelOutput
 
@@ -170,12 +176,12 @@ def evaluateModel(model,batchSize, visualize):
 
 
     # actual Evaluation
-    imgs = os.listdir('data/data_road/testing/image_2/')
+    imgs = os.listdir(eval_image_input_path)
     print("")
-    for filename in os.listdir('data/data_road/testing/image_2/'):
+    for filename in os.listdir(eval_image_input_path):
         if filename == '.DS_Store':
             continue
-        inputImgOrig    = cv2.resize(cv2.imread('data/data_road/testing/image_2/' + filename), (640,192))
+        inputImgOrig    = cv2.resize(cv2.imread(eval_image_input_path + filename), (640,192))
         inputImg    = np.transpose(inputImgOrig.astype('float32'),      axes=[1,0,2])
         output = modelPredictWrapper(model, inputImg)
         count += 1
@@ -196,9 +202,13 @@ def evaluateModel(model,batchSize, visualize):
     print("")
 
 
+print("Model Session ID: {}".format(args.session))
+print("Model from epoch: {}".format(args.epoch))
 print("Testing model: {}".format(model_name))
 if not os.path.exists(output_img_path):
     os.makedirs(output_img_path)
+print("Reading dataset input from: {}".format(eval_image_input_path))
+print("Writing model output to: {}".format(output_img_path))
 
 model.load_weights(os.path.join(model_path, model_name))
 evaluateModel(model,args.batch, args.visualize)
