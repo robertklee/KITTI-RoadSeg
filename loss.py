@@ -38,26 +38,3 @@ class modelLoss():
     def applyLoss(self, y_true, y_pred):
         return dice_coef_loss(y_true, y_pred)
         #return L_p
-
-
-if __name__ == "__main__":
-    from dataGen import depthDataGenerator
-    import cv2
-    import numpy as np
-
-    batchSize = 8
-    
-    train_generator  = depthDataGenerator('../val/left/', '../val/right/',   batch_size=batchSize, shuffle=True, max_img_time_diff=700)
-
-    inputImage, y_true = train_generator.__getitem__(1)
-
-    left_raw        = y_true[0,:,:,0:3]
-    right_raw        = y_true[0,:,:,6:9]
-
-    cv2.imshow("test", left_raw.astype('uint8'))
-    cv2.waitKey(-1)
-
-    cv2.imshow("test", right_raw.astype('uint8'))
-    cv2.waitKey(-1)
-
-    y_true = tf.convert_to_tensor(y_true.astype('float32'))
