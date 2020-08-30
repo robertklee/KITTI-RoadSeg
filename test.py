@@ -63,8 +63,9 @@ argparser.add_argument('-v',
 args = argparser.parse_args()
 
 # convert string arguments to appropriate type
-args.visualize = args.visualize == '1' or args.visualize.lower() == 'true'
-args.epochs = int(args.epochs)
+if type(args.visualize) is not bool:
+    args.visualize = args.visualize == '1' or args.visualize.lower() == 'true'
+args.epochs = int(args.epoch)
 args.batch = int(args.batch)
 args.resnet = int(args.resnet)
 
