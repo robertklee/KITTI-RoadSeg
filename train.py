@@ -61,28 +61,25 @@ trainingRunTime = time.ctime().replace(':', '_')
 
 Notes = 'KITTI_Road'
 
-# convert from args to parameters
-batchSize = args.batch
-
 # build loss
-lossClass = modelLoss(0.001,0.85,640,192,batchSize)
+lossClass = modelLoss(0.001,0.85,640,192,args.batch)
 loss = lossClass.applyLoss 
 
 # build data generators
-train_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=batchSize, shuffle=True)
-test_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=batchSize, shuffle=True, test=True)
+train_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=args.batch, shuffle=True)
+test_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=args.batch, shuffle=True, test=True)
 
 # build model
 model = create_Model(input_shape=(640,192,3), encoder_type=args.resnet)
 model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=[loss, 'accuracy'])
 
 # callbacks
-if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/'):
-    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/')
-mc = ModelCheckpoint('models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='val_loss')
-mc1 = ModelCheckpoint('models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='loss')
+if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type) + '/'):
+    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type) + '/')
+mc = ModelCheckpoint('models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='val_loss')
+mc1 = ModelCheckpoint('models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5', monitor='loss')
 rl = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=2, verbose=1) # not used
-tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(batchSize) + '_resnet_' + str(resnet_type), update_freq=250)
+tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(resnet_type), update_freq=250)
 
 # Schedule Learning rate Callback
 def lr_schedule(epoch):
