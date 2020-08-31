@@ -117,5 +117,5 @@ training_end = time.time()
 setup_time = training_start - setup_start
 training_time = training_end - training_start
 
-print("Total setup time: {}".format(str(timedelta(setup_time))))
-print("Total train time: {}".format(str(timedelta(training_time))))
+print("Total setup time: {}".format(str(timedelta(seconds=setup_time))))
+print("Total train time: {}".format(str(timedelta(seconds=training_time))))
