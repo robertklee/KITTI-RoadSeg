@@ -39,7 +39,8 @@ batchSize = 1
 model_epoch_base = '_weights_epoch'
 output_img_base_dir = 'output'
 model_base_dir = 'models'
-visualize = False
+visualize_default = False
+use_test_images_default = True
 
 argparser.add_argument('-e',
                        '--epoch',
@@ -59,8 +60,12 @@ argparser.add_argument('-r',
                        help='resnet type')
 argparser.add_argument('-v',
                        '--visualize',
-                       default=visualize,
+                       default=visualize_default,
                        help='enable visualize')
+argparser.add_argument('-t',
+                       '--test',
+                       default=use_test_images_default,
+                       help='use test images')
 
 args = argparser.parse_args()
 
@@ -70,8 +75,10 @@ if type(args.visualize) is not bool:
 args.epochs = int(args.epoch)
 args.batch = int(args.batch)
 args.resnet = int(args.resnet)
+if type(args.test) is not bool:
+    args.test = args.test == '1' or args.test.lower() == 'true'
 
-src_type = 'test'
+src_type = 'test' if args.test else 'train'
 eval_image_input_path = 'data/data_road/{}ing/image_2/'.format(src_type)
 
 output_img_path = os.path.join(output_img_base_dir, args.session, str(args.epoch), src_type)
