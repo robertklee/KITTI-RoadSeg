@@ -189,7 +189,7 @@ def evaluateModel(model,batchSize, visualize):
     for filename in os.listdir(eval_image_input_path):
         if filename == '.DS_Store':
             continue
-        inputImgOrig    = cv2.resize(cv2.imread(eval_image_input_path + filename), (640,192))
+        inputImgOrig    = cv2.resize(cv2.imread(os.path.join(eval_image_input_path, filename)), (640,192))
         inputImg    = np.transpose(inputImgOrig.astype('float32'),      axes=[1,0,2])
         output = modelPredictWrapper(model, inputImg)
         count += 1
