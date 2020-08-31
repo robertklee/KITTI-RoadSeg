@@ -12,6 +12,7 @@ logs
 data_tiny/vgg
 runs_tiny
 video
+.vscode
 
 
 # Byte-compiled / optimized / DLL files
