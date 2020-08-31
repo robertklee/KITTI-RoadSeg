@@ -88,7 +88,7 @@ if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' 
 mc = ModelCheckpoint(modelSavePath, monitor='val_loss')
 mc1 = ModelCheckpoint(modelSavePath, monitor='loss')
 rl = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=2, verbose=1) # not used
-tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet), update_freq=250)
+tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet), histogram_freq=0, write_graph=True, write_images=True)
 
 # Schedule Learning rate Callback
 def lr_schedule(epoch):
