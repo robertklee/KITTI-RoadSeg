@@ -22,14 +22,12 @@ import matplotlib.pyplot as plt
 
 '''
 TODO 
-add command line arguments to test.py
 re-evaluate loss function 
-overlay image 
-examine model output since the values are very large
-quick way to refer to a specific epoch checkpoint file
+overlay image a bit better
+resnet old decoder is broken so should be removed
 evaluation metrics for generated output
 
-linear histogram equilization
+- (no longer needed) linear histogram equilization
 '''
 
 argparser = argparse.ArgumentParser(description='Testing')
