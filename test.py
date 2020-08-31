@@ -31,8 +31,7 @@ evaluation metrics for generated output
 - (no longer needed) linear histogram equilization
 '''
 
-argparser = argparse.ArgumentParser(description='Testing')
-
+# Default parameters
 model_epoch_number = 20#16
 resnet_type = 18
 session_id = 'KITTI_Road_UNet_Sun Aug 30 19_52_21 2020_batchsize_25_resnet_18'
@@ -42,6 +41,9 @@ output_img_base_dir = 'output'
 model_base_dir = 'models'
 visualize_default = False
 use_test_images_default = True
+
+# Argparser
+argparser = argparse.ArgumentParser(description='Testing')
 
 argparser.add_argument('-e',
                        '--epoch',
@@ -80,7 +82,7 @@ if type(args.test) is not bool:
     args.test = args.test == '1' or args.test.lower() == 'true'
 
 src_type = 'test' if args.test else 'train'
-eval_image_input_path = 'data/data_road/{}ing/image_2/'.format(src_type)
+eval_image_input_path = constants.data_test_image_dir if args.test else constants.data_train_image_dir
 
 output_img_path = os.path.join(output_img_base_dir, args.session, str(args.epoch), src_type)
 model_path = os.path.join(model_base_dir, args.session)
@@ -126,7 +128,7 @@ def modelPredictWrapper(model, inputImg):
     return modelOutput
 
 def evaluateModel(model,batchSize, visualize):
-    val_generator  = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=args.batch, shuffle=False, augmentations=False)
+    val_generator  = segmentationGenerator(constants.data_train_image_dir,constants.data_train_gt_dir, batch_size=args.batch, shuffle=False, augmentations=False)
     # scores = model.evaluate_generator(val_generator, verbose=1)
     # print("Total Loss")
     # print(scores)
@@ -135,13 +137,13 @@ def evaluateModel(model,batchSize, visualize):
     ABS = 0 
     SQR = 0 
     # Random Qualitative Evaluation
-    imageList = os.listdir('data/data_road/testing/image_2/')
+    imageList = os.listdir(constants.data_test_image_dir)
     if constants.system_files in imageList:
         imageList.remove(constants.system_files)
     imageName = random.choice(imageList)
-    inputImg = cv2.imread('data/data_road/testing/image_2/' + imageName)
+    inputImg = cv2.imread(constants.data_test_image_dir + imageName)
     rawImage = cv2.resize(inputImg, (640,192))
-    inputImgOrig  = cv2.resize(cv2.imread('data/data_road/testing/image_2/' + imageName), (640,192))
+    inputImgOrig  = cv2.resize(cv2.imread(constants.data_test_image_dir + imageName), (640,192))
     inputImg  = np.transpose(inputImgOrig.astype('float32'), axes=[1,0,2])
     output = modelPredictWrapper(model, inputImg)
     def displayOutput(output, dim=0):
@@ -207,7 +209,7 @@ def evaluateModel(model,batchSize, visualize):
     print("Mean SQR: ", SQR / count)
     print("")
 
-
+print("\n\n")
 print("Model Session ID: {}".format(args.session))
 print("Model from epoch: {}".format(args.epoch))
 print("Testing model: {}".format(model_name))
