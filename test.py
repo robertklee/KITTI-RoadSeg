@@ -1,24 +1,25 @@
+import argparse
 import os
-import tensorflow as tf
-import keras 
-import cv2
 import random
-import numpy as np
+import re
 from math import cos, pi
+
+import cv2
+import keras
 import keras.backend as K
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+from keras.callbacks import (LearningRateScheduler, ModelCheckpoint,
+                             ReduceLROnPlateau, TensorBoard)
 from keras.optimizers import Adam
-from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, TensorBoard, LearningRateScheduler
 from keras.utils import multi_gpu_model
 
-from resnet_model import create_Model
-from loss import modelLoss
-from generator import segmentationGenerator
 import constants
-import argparse
+from generator import segmentationGenerator
 from helpers import make_overlay
-import re
-import matplotlib.pyplot as plt
-
+from loss import modelLoss
+from resnet_model import create_Model
 
 '''
 TODO 

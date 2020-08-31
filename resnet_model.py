@@ -1,11 +1,14 @@
 import keras
-from keras.layers import Conv2D, BatchNormalization, MaxPool2D, Flatten, AveragePooling2D, concatenate, Add, Activation, Input, UpSampling2D, Conv2DTranspose, ZeroPadding2D, Reshape
-
 from keras import Model
+from keras.layers import (Activation, Add, AveragePooling2D,
+                          BatchNormalization, Conv2D, Conv2DTranspose, Flatten,
+                          Input, MaxPool2D, Reshape, UpSampling2D,
+                          ZeroPadding2D, concatenate)
 from keras.optimizers import Adam
 
-from resnet_def import ResNet50, ResNet18
 import constants
+from resnet_def import ResNet18, ResNet50
+
 
 '''
 

@@ -1,6 +1,8 @@
-import numpy as np
-import matplotlib.cm as cm
 import os
+
+import matplotlib.cm as cm
+import numpy as np
+
 
 '''
 The following functions are modified from KittiSeg repository
