@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+from datetime import timedelta
 from math import cos, pi
 
 import cv2
@@ -61,6 +62,7 @@ print("**************************************\nTensorFlow detected the following
 tf.test.gpu_device_name()
 
 print("\n\nSetup start: {}\n".format(time.ctime()))
+setup_start = time.time()
 
 # define these
 trainingRunTime = time.ctime().replace(':', '_')
@@ -105,7 +107,15 @@ print("Model saved to:")
 print(modelSavePath)
 
 print("\n\nTraining start: {}\n".format(time.ctime()))
+training_start = time.time()
 
 model.fit_generator(train_generator, epochs=args.epochs, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
 
 print("\n\nTraining end: {}\n".format(time.ctime()))
+training_end = time.time()
+
+setup_time = training_start - setup_start
+training_time = training_end - training_start
+
+print("Total setup time: {}".format(str(timedelta(setup_time))))
+print("Total train time: {}".format(str(timedelta(training_time))))
