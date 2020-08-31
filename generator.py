@@ -1,9 +1,12 @@
-import keras
 import os
 import random
-import numpy as np
+
 import cv2
+import keras
+import numpy as np
+
 import constants
+
 
 # TODO use imgaug for more robust image augmentation
 def preprocess_input(image, randomVals):

@@ -1,20 +1,22 @@
-import os
-import tensorflow as tf
-import keras 
-import cv2
-import numpy as np
-from math import cos, pi
-import keras.backend as K
-from keras.optimizers import Adam
-from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, TensorBoard,LearningRateScheduler
-from keras.utils import multi_gpu_model
-import time
 import argparse
-import constants
+import os
+import time
+from math import cos, pi
 
-from resnet_model import create_Model
-from loss import modelLoss
+import cv2
+import keras
+import keras.backend as K
+import numpy as np
+import tensorflow as tf
+from keras.callbacks import (LearningRateScheduler, ModelCheckpoint,
+                             ReduceLROnPlateau, TensorBoard)
+from keras.optimizers import Adam
+from keras.utils import multi_gpu_model
+
+import constants
 from generator import segmentationGenerator
+from loss import modelLoss
+from resnet_model import create_Model
 
 DEFAULT_DATA_DIR = './data'
 DEFAULT_RUNS_DIR = './runs'
