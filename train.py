@@ -112,6 +112,7 @@ training_start = time.time()
 model.fit_generator(train_generator, epochs=args.epochs, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
 
 print("\n\nTraining end:   {}\n".format(time.ctime()))
+print("Model saved to: {}".format(modelSavePath))
 training_end = time.time()
 
 setup_time = training_start - setup_start
