@@ -19,9 +19,9 @@ from generator import segmentationGenerator
 from loss import modelLoss
 from resnet_model import create_Model
 
-DEFAULT_DATA_DIR = './data'
-DEFAULT_RUNS_DIR = './runs'
-DEFAULT_MODEL_PATH = "models/model.ckpt"
+# DEFAULT_DATA_DIR = './data'
+# DEFAULT_RUNS_DIR = './runs'
+# DEFAULT_MODEL_PATH = "models/model.ckpt"
 DEFAULT_EPOCHS = 20
 DEFAULT_BATCH_SIZE = 12
 resnet_type = 18
@@ -58,13 +58,13 @@ args.epochs = int(args.epochs)
 args.batch = int(args.batch)
 args.resnet = int(args.resnet)
 
-print("**************************************\nTensorFlow detected the following GPU(s):")
+print("\nTensorFlow detected the following GPU(s):")
 tf.test.gpu_device_name()
 
 print("\n\nSetup start: {}\n".format(time.ctime()))
 setup_start = time.time()
 
-# define these
+# model naming parameter
 trainingRunTime = time.ctime().replace(':', '_')
 
 if constants.use_unet:
@@ -77,8 +77,8 @@ lossClass = modelLoss(0.001,0.85,640,192,args.batch)
 loss = lossClass.applyLoss 
 
 # build data generators
-train_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=args.batch, shuffle=True)
-test_generator = segmentationGenerator('data/data_road/training/image_2','data/data_road/training/gt_image_2', batch_size=args.batch, shuffle=True, test=True)
+train_generator = segmentationGenerator(constants.data_train_image_dir, constants.data_train_gt_dir, batch_size=args.batch, shuffle=True)
+test_generator = segmentationGenerator(constants.data_train_image_dir, constants.data_train_gt_dir, batch_size=args.batch, shuffle=True, test=True)
 
 # build model
 model = create_Model(input_shape=(640,192,3), encoder_type=args.resnet)
@@ -111,7 +111,7 @@ training_start = time.time()
 
 model.fit_generator(train_generator, epochs=args.epochs, validation_data=test_generator, callbacks=[mc,mc1,lr,tb], initial_epoch=0)
 
-print("\n\nTraining end: {}\n".format(time.ctime()))
+print("\n\nTraining end:   {}\n".format(time.ctime()))
 training_end = time.time()
 
 setup_time = training_start - setup_start
