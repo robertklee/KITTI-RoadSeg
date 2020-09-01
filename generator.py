@@ -52,7 +52,7 @@ def preprocess_input(image, randomVals):
 
 class segmentationGenerator(keras.utils.Sequence):
     img_list = []
-    trainRatio = 0.8 # 80% train, 20% test
+    constants.train_ratio = 0.8 # 80% train, 20% test
     '''Generates data for Keras'''
     '''Framework taken from https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly'''
     '''Provided directories should contain the same number of files all with the same names to their pair image'''
@@ -167,9 +167,9 @@ class segmentationGenerator(keras.utils.Sequence):
             segmentationGenerator.img_list = imgs
         
         if (self.test):
-            self.inputs = segmentationGenerator.img_list[int(len(segmentationGenerator.img_list) * segmentationGenerator.trainRatio):]
+            self.inputs = segmentationGenerator.img_list[int(len(segmentationGenerator.img_list) * segmentationGenerator.constants.train_ratio):]
         else:
-            self.inputs = segmentationGenerator.img_list[0:int(len(segmentationGenerator.img_list) * segmentationGenerator.trainRatio)]
+            self.inputs = segmentationGenerator.img_list[0:int(len(segmentationGenerator.img_list) * segmentationGenerator.constants.train_ratio)]
 
         #self.inputs = self.inputs[0:100]   
         print("")
@@ -178,8 +178,8 @@ class segmentationGenerator(keras.utils.Sequence):
 
 
 if __name__ == "__main__":
-    train = segmentationGenerator('data/data_road/training/image_2/', 'data/data_road/training/gt_image_2/',   batch_size=8, shuffle=True)
-    test = segmentationGenerator('data/data_road/training/image_2/', 'data/data_road/training/gt_image_2/',   batch_size=8, shuffle=True, test=True)
+    train = segmentationGenerator(constants.data_test_image_dir, constants.data_train_gt_dir,   batch_size=8, shuffle=True)
+    test = segmentationGenerator(constants.data_test_image_dir, constants.data_train_gt_dir,   batch_size=8, shuffle=True, test=True)
 
     train.__getitem__(1)
     test.__getitem__(1)

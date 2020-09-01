@@ -12,6 +12,9 @@ system_files = '.DS_Store'
 
 use_unet = True
 
+train_ratio = 0.8 # 80% train, 20% test
+assert train_ratio > 0 and train_ratio <= 1
+
 # ************************************************ #
 # Dataset Locations
 
