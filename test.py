@@ -19,7 +19,7 @@ import constants
 from generator import segmentationGenerator
 from helpers import make_overlay
 from loss import modelLoss
-from resnet_model import create_Model
+from model import create_Model
 
 '''
 TODO 

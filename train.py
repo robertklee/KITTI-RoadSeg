@@ -17,7 +17,7 @@ from keras.utils import multi_gpu_model
 import constants
 from generator import segmentationGenerator
 from loss import modelLoss
-from resnet_model import create_Model
+from model import create_Model
 
 # DEFAULT_DATA_DIR = './data'
 # DEFAULT_RUNS_DIR = './runs'
