@@ -221,6 +221,4 @@ print("Writing model output to: {}".format(output_img_path))
 model.load_weights(os.path.join(model_path, model_name))
 evaluateModel(model,args.batch, args.visualize)
 
-# print("Testing model trained on Colab")
-# model.load_weights("models/_weights_epoch20_val_loss_0.5520_train_loss_0.5597.hdf5")
-# evaluateModel(model,args.batch, args.visualize)
+print("Completed. Model outputs can be found at: {}".format(output_img_path))
