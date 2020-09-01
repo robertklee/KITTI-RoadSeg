@@ -1,7 +1,6 @@
 '''
-THIS MODEL AND CODE WAS ADAPTED FROM 
+This model and code was adapted from 
 https://github.com/qubvel/classification_models/blob/a0f006e05485a34ccf871c421279864b0ccd220b/classification_models/models/resnet.py#L173
-THIS WAS DONE TO BE ABLE TO USE PRE-TRAINED WEIGHTS AS I DO NOT HAVE ACCESS OR THE TIME TO TRAIN A CLASSIFIER ON IMAGENET
 '''
 
 
