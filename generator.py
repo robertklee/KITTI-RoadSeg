@@ -167,9 +167,9 @@ class segmentationGenerator(keras.utils.Sequence):
             segmentationGenerator.img_list = imgs
         
         if (self.test):
-            self.inputs = segmentationGenerator.img_list[int(len(segmentationGenerator.img_list) * segmentationGenerator.constants.train_ratio):]
+            self.inputs = segmentationGenerator.img_list[int(len(segmentationGenerator.img_list) * constants.train_ratio):]
         else:
-            self.inputs = segmentationGenerator.img_list[0:int(len(segmentationGenerator.img_list) * segmentationGenerator.constants.train_ratio)]
+            self.inputs = segmentationGenerator.img_list[0:int(len(segmentationGenerator.img_list) * constants.train_ratio)]
 
         #self.inputs = self.inputs[0:100]   
         print("")
