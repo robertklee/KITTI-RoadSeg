@@ -1,6 +1,10 @@
-from . import get_submodules_from_kwargs
+'''
+This file is adapted from https://github.com/qubvel/classification_models/blob/master/classification_models/weights.py
+'''
+import os
+import requests
 
-__all__ = ['load_model_weights']
+import constants
 
 
 def _find_weights(model_name, dataset, include_top):
@@ -10,26 +14,33 @@ def _find_weights(model_name, dataset, include_top):
     return w
 
 
-def load_model_weights(model, model_name, dataset, classes, include_top, **kwargs):
-    _, _, _, keras_utils = get_submodules_from_kwargs(kwargs)
+def load_model_weights(model, model_name, dataset, classes, include_top):
+    weights_arr = _find_weights(model_name, dataset, include_top)
 
-    weights = _find_weights(model_name, dataset, include_top)
-
-    if weights:
-        weights = weights[0]
+    if weights_arr:
+        weights = weights_arr[0]
 
         if include_top and weights['classes'] != classes:
             raise ValueError('If using `weights` and `include_top`'
                              ' as true, `classes` should be {}'.format(weights['classes']))
+        
+        model_filename = weights['url'].split('/')[-1]
+        weights_path = os.path.join(constants.models_location, model_filename)
 
-        weights_path = keras_utils.get_file(
-            weights['name'],
-            weights['url'],
-            cache_subdir='models',
-            md5_hash=weights['md5']
-        )
+        if not os.path.exists(weights_path):
+            print("Model {} pre-trained weights was not found. Downloading weights...".format(model_name))
+            if not os.path.exists(constants.models_location):
+                print("\"{}\" model storage directory was not found. Creating directory...".format(constants.models_location))
+                os.makedirs(constants.models_location)
+            
+            url = weights['url']
+            print("Downloading weights from {}".format(url))
+            r = requests.get(url, allow_redirects=True)
 
-        model.load_weights(weights_path)
+            open(weights_path, 'wb').write(r.content)
+
+        model.load_weights(weights_path, by_name=True)
+        print("Loaded model weights from: {}".format(weights_path))
 
     else:
         raise ValueError('There is no weights for such configuration: ' +

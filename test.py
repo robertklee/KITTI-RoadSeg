@@ -77,7 +77,7 @@ if type(args.visualize) is not bool:
     args.visualize = args.visualize == '1' or args.visualize.lower() == 'true'
 args.epochs = int(args.epoch)
 args.batch = int(args.batch)
-args.resnet = int(args.resnet)
+args.resnet = constants.EncoderType(int(args.resnet))
 if type(args.test) is not bool:
     args.test = args.test == '1' or args.test.lower() == 'true'
 

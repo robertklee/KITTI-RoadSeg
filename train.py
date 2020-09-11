@@ -56,7 +56,7 @@ argparser.add_argument('-r',
 args = argparser.parse_args()
 args.epochs = int(args.epochs)
 args.batch = int(args.batch)
-args.resnet = int(args.resnet)
+args.resnet = constants.EncoderType(int(args.resnet))
 
 print("\nTensorFlow detected the following GPU(s):")
 tf.test.gpu_device_name()

@@ -1,3 +1,5 @@
+from enum import Enum
+
 # ************************************************ #
 # Parameters
 input_shape = (640,192,3)
@@ -27,3 +29,21 @@ data_test_image_dir  = 'data/data_road/testing/image_2/'
 
 resnet_18_model_path = "models/resnet18_imagenet_1000_no_top.h5"
 resnet_50_model_path = "models/resnet50_imagenet_1000_no_top.h5"
+
+def get_model_path(resnet_type):
+    return "models/resnet{}_imagenet_1000_no_top.h5".format(str(resnet_type))
+
+# ************************************************ #
+# Model Types
+
+class EncoderType(Enum):
+    resnet18  = 18
+    resnet34  = 34
+    resnet50  = 50
+    resnet101 = 101
+    resnet152 = 152
+
+classes         = 1000
+dataset         = 'imagenet'
+include_top     = False
+models_location = "models"

@@ -9,7 +9,7 @@ from keras.optimizers import Adam
 import constants
 from resnet_def import ResNet18, ResNet50
 from unet_def import UNet
-
+from weights import load_model_weights
 
 '''
 
@@ -191,28 +191,36 @@ def buildDecoder(inputLayer, scale_1, scale_2, scale_3, outputChannels=1):
     return concatenate([x, scale_1_out, scale_2_out], axis=3), scale_1_out, scale_2_out
 
 
-def create_Model(input_shape=constants.input_shape, encoder_type=50):
-    if encoder_type == 50:
-        inputLayer, outputLayer, scaleLayers = ResNet50(input_shape=constants.input_shape,include_top=False, create_encoder=True)
-        modelPath = constants.resnet_50_model_path
-        
-    if encoder_type == 18:
-        inputLayer, outputLayer, scaleLayers = ResNet18(input_shape=constants.input_shape,include_top=False, create_encoder=True)
-        modelPath = constants.resnet_18_model_path
+def create_Model(input_shape=constants.input_shape, encoder_type=constants.EncoderType.resnet50):
+    model_include_top = constants.include_top
     
+    if encoder_type == constants.EncoderType.resnet50:
+        inputLayer, outputLayer, scaleLayers = ResNet50(input_shape=constants.input_shape,include_top=False, create_encoder=True)
+        # modelPath = constants.resnet_50_model_path
+        model_name = constants.EncoderType.resnet50.name
+        
+    elif encoder_type == constants.EncoderType.resnet18:
+        inputLayer, outputLayer, scaleLayers = ResNet18(input_shape=constants.input_shape,include_top=False, create_encoder=True)
+        # modelPath = constants.resnet_18_model_path
+        model_name = constants.EncoderType.resnet18.name
+    
+    else:
+        raise ValueError("Invalid encoder type. Encoder type must be within constants.EncoderType")
+
     if (constants.use_unet):
         networkOutput = UNet(outputLayer, scaleLayers[2], scaleLayers[1], scaleLayers[0], output_height=constants.input_shape[0], output_width=constants.input_shape[1])
     else:
         networkOutput, scale_1_out, scale_2_out = buildDecoder(outputLayer, scaleLayers[2], scaleLayers[1], scaleLayers[0], 1)
     model = Model(inputs=[inputLayer], outputs=[networkOutput])#, scale_1_out, scale_2_out, scale_3_out])
-    model.load_weights(modelPath, by_name=True)
+
+    # model.load_weights(modelPath, by_name=True)
+    load_model_weights(model, model_name, constants.dataset, constants.classes, model_include_top)
     model.summary()
     return model
 
-if __name__ == "__main__":    
-
+if __name__ == "__main__":
     print("Testing creating models")
-    model = create_Model(input_shape=constants.input_shape, encoder_type=18)
+    model = create_Model(input_shape=constants.input_shape, encoder_type=constants.EncoderType.resnet18)
     print("Done creating ResNet18 backbone model")
-    model = create_Model(input_shape=constants.input_shape_full_size, encoder_type=50)
+    model = create_Model(input_shape=constants.input_shape_full_size, encoder_type=constants.EncoderType.resnet50)
     print("Done creating ResNet50 backbone model")

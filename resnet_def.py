@@ -302,6 +302,16 @@ def ResNet18(input_shape=None, input_tensor=None, weights=None, classes=1000, in
         create_encoder=create_encoder
     )
 
+def ResNet34(input_shape=None, input_tensor=None, weights=None, classes=1000, include_top=True, create_encoder=False):
+    return ResNet(
+        MODELS_PARAMS['resnet34'],
+        input_shape=input_shape,
+        input_tensor=input_tensor,
+        include_top=include_top,
+        classes=classes,
+        weights=weights, 
+        create_encoder=create_encoder
+    )
 
 def ResNet50(input_shape=None, input_tensor=None, weights=None, classes=1000, include_top=True, create_encoder=False):
     return ResNet(
@@ -314,6 +324,27 @@ def ResNet50(input_shape=None, input_tensor=None, weights=None, classes=1000, in
         create_encoder=create_encoder
     )
 
+def ResNet101(input_shape=None, input_tensor=None, weights=None, classes=1000, include_top=True, create_encoder=False):
+    return ResNet(
+        MODELS_PARAMS['resnet101'],
+        input_shape=input_shape,
+        input_tensor=input_tensor,
+        include_top=include_top,
+        classes=classes,
+        weights=weights, 
+        create_encoder=create_encoder
+    )
+
+def ResNet152(input_shape=None, input_tensor=None, weights=None, classes=1000, include_top=True, create_encoder=False):
+    return ResNet(
+        MODELS_PARAMS['resnet152'],
+        input_shape=input_shape,
+        input_tensor=input_tensor,
+        include_top=include_top,
+        classes=classes,
+        weights=weights, 
+        create_encoder=create_encoder
+    )
 
 
 def preprocess_input(x, **kwargs):
