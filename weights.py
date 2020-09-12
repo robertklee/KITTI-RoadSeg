@@ -34,7 +34,7 @@ def load_model_weights(model, model_name, dataset, classes, include_top):
                 os.makedirs(constants.models_location)
             
             url = weights['url']
-            print("Downloading weights from {}".format(url))
+            print("Downloading weights from: {}".format(url))
             r = requests.get(url, allow_redirects=True)
 
             open(weights_path, 'wb').write(r.content)

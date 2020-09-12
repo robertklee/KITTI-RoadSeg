@@ -23,6 +23,7 @@ assert train_ratio > 0 and train_ratio <= 1
 data_train_image_dir = 'data/data_road/training/image_2'
 data_train_gt_dir    = 'data/data_road/training/gt_image_2'
 data_test_image_dir  = 'data/data_road/testing/image_2/'
+data_location        = 'data'
 
 # ************************************************ #
 # Model Pre-Trained Weight Locations

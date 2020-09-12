@@ -6,6 +6,7 @@ import keras
 import numpy as np
 
 import constants
+import dataset
 
 
 # TODO use imgaug for more robust image augmentation
@@ -56,6 +57,9 @@ class segmentationGenerator(keras.utils.Sequence):
     '''Framework taken from https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly'''
     '''Provided directories should contain the same number of files all with the same names to their pair image'''
     def __init__(self, img_dir, seg_dir, batch_size = 64, image_size=(640,192), shuffle=True, augmentations=True, test=False):
+        # download dataset if not exist
+        dataset.verify_dataset()
+
         self.img_dir = img_dir
         self.seg_dir = seg_dir
         self.image_size = image_size
