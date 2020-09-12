@@ -52,7 +52,6 @@ def preprocess_input(image, randomVals):
 
 class segmentationGenerator(keras.utils.Sequence):
     img_list = []
-    constants.train_ratio = 0.8 # 80% train, 20% test
     '''Generates data for Keras'''
     '''Framework taken from https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly'''
     '''Provided directories should contain the same number of files all with the same names to their pair image'''

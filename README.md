@@ -26,3 +26,4 @@ Download ResNet V2 50 and VGG 16 from [Tensorflow's GitHub link](https://github.
 - link to model
 - link to trained outputs
 - proper set up of repo to train/test
+- train and test should be repeated and split evenly across the three types

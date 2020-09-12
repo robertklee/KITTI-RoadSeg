@@ -1,7 +1,7 @@
 import argparse
 import os
 import time
-from datetime import timedelta
+from datetime import timedelta, datetime
 from math import cos, pi
 
 import cv2
@@ -65,7 +65,7 @@ print("\n\nSetup start: {}\n".format(time.ctime()))
 setup_start = time.time()
 
 # model naming parameter
-trainingRunTime = time.ctime().replace(':', '_')
+trainingRunTime = datetime.today().strftime('%Y-%m-%d %H %M %S')
 
 if constants.use_unet:
     Notes = 'KITTI_Road_UNet'
@@ -84,15 +84,15 @@ test_generator = segmentationGenerator(constants.data_train_image_dir, constants
 model = create_Model(input_shape=(640,192,3), encoder_type=args.resnet)
 model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=[loss, 'accuracy'])
 
-modelSavePath = 'models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5'
+modelSavePath = 'models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5'
 
 # callbacks
-if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet) + '/'):
-    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet) + '/')
+if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value) + '/'):
+    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value) + '/')
 mc = ModelCheckpoint(modelSavePath, monitor='val_loss')
 mc1 = ModelCheckpoint(modelSavePath, monitor='loss')
 rl = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=2, verbose=1) # not used
-tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet), histogram_freq=0, write_graph=True, write_images=True)
+tb = TensorBoard(log_dir='logs/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value), histogram_freq=0, write_graph=True, write_images=True)
 
 # Schedule Learning rate Callback
 def lr_schedule(epoch):
