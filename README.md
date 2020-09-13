@@ -6,6 +6,8 @@ This document describes implementing a convolutional neural network (CNN) to per
 # Getting Started
 Clone the repository and run `train.py` to train the model. The command line parameters that `train.py` are described in `argparser` help comments. The script will check for the pre-trained model weights and dataset, and automatically download them if they don't exist. The links are confirmed to be working as of Sept. 12th, 2020.
 
+This project was tested with **Python 3.6.8**.
+
 Requirements can be installed via the `requirements.txt` file.
 
 Completed models, as well as the dataset and pre-trained encoder weights, are available on a personal [OneDrive link](https://1drv.ms/u/s!AnSUzPfRDFUagcFB0qdPnt9YKApvcw?e=Drg1qf).

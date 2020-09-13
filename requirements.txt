@@ -4,5 +4,5 @@ tensorflow==1.15.2
 opencv-contrib-python==4.4.0.42
 opencv-python==4.4.0.42
 matplotlib
-numpy==1.16.0
+numpy
 requests
