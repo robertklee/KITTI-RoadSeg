@@ -37,6 +37,49 @@ The encoder was chosen to be a ResNet model because it allows us to train a deep
 <!-- # Requirements
 Download ResNet V2 50 and VGG 16 from [Tensorflow's GitHub link](https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models) -->
 
+# Results
+The results of the model are available at: https://www.dropbox.com/s/hoxbbl20gql7f53/ECE%20470%20Final%20Report.pdf?dl=0
+TODO: embed images into README
+
+# Discussion
+For the evaluation function, the F1 score in best case was 99.1% and accuracy is 98.6%; in worse case, the F1 score was 92.5% and accuracy is 91.3%. We also analyzed the two different encoders: ResNet18 and ResNet50. In the UU case, ResNet50 performed better than ResNet18. However, ResNet50 did not perform well in some complicated situations; thus, it sometimes performed worse. 
+
+We note that the trained model is not overfitting, since the training and validation accuracy are both relatively monotonously increasing with respect to epochs. In addition, the training and validation loss function is also steadily decreasing with respect to epochs. This is seen in Figure 9 and Figure 10.
+
+We observe that the model performs best when the road surface is clearly distinguished from surroundings. It is especially strong when there are distinct lane markings. This is likely because the model can extract the edges as an indicator of potential road areas. 
+
+As shown in Figure 11, the model is robust in many different situations. As shown in Figure 12, the model is weak when there are misleading lines that are visually similar to road surfaces, such as the train tracks. It also has difficulty when there is a high contrast shadow region, or where the road is split by a median. The model seems to favour segmentations that are not split on the lower section of the image. It also prefers connected road regions. This is reasonable, since real-world roads will be connected. However, this results in road surfaces that are split from the very bottom of the image being incorrectly segmented, such as the bottom image in Figure 12. However, this may be tolerable, because the car cannot move into that lane anyway. 
+
+In Table 1, we see the model has both the best and worst performance on urban unmarked images. This class of images has the greatest variation because urban environments have irregularly shaped roads, many pedestrians and parked vehicle occlusions, and highly varied surrounding obstacles, among others. It is reasonable that the model performs the worst in this class. 
+
+Tighter spread in performance is seen on the urban multiple marked lines dataset. This is likely because the model has learned to use lane markings to determine road surfaces, and multiple parallel lines will strengthen that prediction. In addition, wider roads requiring multiple lane markings are often found in the outskirts of the city, where the roads are naturally straighter and have fewer random objects and occlusions. 
+
+We note that the ResNet 50-based model had both better and worse performance. This is reasonable, since deeper networks with more trainable parameters may perform better if we can provide a larger dataset. Since the given dataset only contains hundreds of images, there may not be enough data to train the deeper model to achieve consistently better performance. Deeper models are also more likely to suffer from the gradient vanishing problem, which may affect the propagation of weight updates.
+
+Multiple challenges were encountered while training the model. The biggest challenge was an incorrect concatenation in the decoder. The final layer was returned as a concatenation of multiple scale outputs, which likely jumbled the network results, causing it to output extremely large positive and negative values. Further, the final layer of that decoder had parts of the model that were visible, without a softmax or sigmoid function that can cap the output values. After fixing it with final output layer of softmax activation, the model results were between the range of [0,1] as expected. 
+
+Another bug was encountered in the segmentation ground truth and was fixed by producing a binary one-hot segmentation for each pixel from the ground truth data.
+Challenges were also encountered in implementing non-standard loss functions, such as birds’ eye view (BEV), in the TensorFlow and Keras language. This is because the available graph operations are limited, and workarounds must be found to implement some math operations. We decided to revert to a pixel-based Dice loss function.
+
+The dataset also posed challenges. The ground truth data for the testing dataset was not available for users to download. Instead, they provide a server where results can be uploaded and evaluated. This is likely because they want to prevent cheating in the benchmark. However, this made it difficult to evaluate the performance of the testing dataset. This was solved by visually inspecting the test output, and calculating the model performance metrics on training data, knowing that this will overestimate the model performance. The test output was similar to the training output, so this did not greatly affect the results.
+
+Another dataset issue was the lack of available driving corridor segmentation ground truth data. This was only available for a third of the total training data. Thus, we changed our plan from performing lane segmentation to road segmentation. If lane segmentation is still desired, we can use weights pre-trained on the road dataset to fine tune with the limited lane marking dataset.
+
+Finally, issues were encountered with the various command line arguments that we programmed. This was solved by testing various combinations of parameters and inspecting and refactoring possible branches.
+
+
+# Future Work
+While the results of the model were strong, there remains work that can improve the results. The major item that will likely greatly improve results is implementing stronger loss functions based on the birds’ eye view metric discussed in Section IV.B: Performance Metric Types. This was not implemented in the first iteration of this model because the calculations require extensive debugging to translate it from normal Python into a language suitable for Keras Backend and TensorFlow. The operations that are available are limited, and not all calculations have a suitable mapping. By improving the loss function, the model can better tune the network parameters during backpropagation. A behaviour-based loss function also improves the results in a driving context.
+
+The current output has a jagged appearance because Upsample2D blocks were used in the decoder. This is a simple scaling of the image, and while it is efficient, it results in artifacts in the output. This is especially noticeable in the last layer, where a Upsample2D of 4x is used, and produces the scaling pixilation artifacts seen in the output. This block can be extended to multiple Upsample2D of 2x separated by convolution layers, which will likely reduce pixilation. 
+
+All of the Upsample2D blocks can also be changed to use a Conv2DTranspose. This also upsamples, but it uses a convolution kernel that is trainable, which can improve model performance.
+
+The decoder is fairly shallow, especially compared to the ResNet50 encoder backbone depth. This may mean we are losing details in the upsampling. We can increase the depth of the decoder to increase the number of trainable parameters, which may improve results. However, this may also lead to a decrease in performance, so this should be compared to the current result.
+
+Finally, we can explore using better Keras metrics to evaluate the training of the model. For example, Mean Intersection-Over-Union may be used. This computes the IOU for each segmentation class and averages them and is a better metric for segmentation problems.
+
+
 # TODO
 - link to trained models
 - train and test should be repeated and split evenly across the three types
