@@ -17,7 +17,7 @@ The KITTI road dataset should be unzipped and placed in a subdirectory called `d
 
 The pre-trained ResNet weights should be placed in a subdirectory called `models`, so the final path is consistent with that in `constants.py`
 
-When loading already trained weights, unzip and place in `models`, in a folder that matches the `Session ID`. Then, update the string in `test.py`. As it is configured currently, `test.py` will read the weights from epoch `20` from session ID `KITTI_Road_UNet_Sun Aug 30 19_52_21 2020_batchsize_25_resnet_18`. Thus, the file path should be `KITTI_Road_UNet_Sun Aug 30 19_52_21 2020_batchsize_25_resnet_18/_weights_epoch20_val_loss_-1.9577_train_loss_-1.9696.hdf5`
+When loading already trained weights, unzip and place in `models`, in a folder that matches the `Session ID`. Then, update the string in `test.py`. As it is configured currently, `test.py` will read the weights from epoch `20` from session ID `KITTI_Road_UNet_v2_Conv2DTranspose_2021-02-03-20h-46m-06s_batchsize_12_resnet_18`. Thus, the file path should be `KITTI_Road_UNet_v2_Conv2DTranspose_2021-02-03-20h-46m-06s_batchsize_12_resnet_18/_weights_epoch20_val_loss_-1.9581_train_loss_-1.9632.hdf5`
 
 The output will be generated using `test.py` and will be placed in `output/{Session ID}/{epoch}/{train/test}/...` 
 
@@ -79,9 +79,9 @@ The decoder is fairly shallow, especially compared to the ResNet50 encoder backb
 
 Finally, we can explore using better Keras metrics to evaluate the training of the model. For example, Mean Intersection-Over-Union may be used. This computes the IOU for each segmentation class and averages them and is a better metric for segmentation problems.
 
+# Updates
+- UNet Decoder has been updated with improved upscaling by using trainable `Conv2DTranspose` instead of `Upsampling2D` 
 
 # TODO
-- link to trained models
 - train and test should be repeated and split evenly across the three types
 - evaluation function
-- fix decoder
