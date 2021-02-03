@@ -65,12 +65,15 @@ print("\n\nSetup start: {}\n".format(time.ctime()))
 setup_start = time.time()
 
 # model naming parameter
-trainingRunTime = datetime.today().strftime('%Y-%m-%d %H %M %S')
+trainingRunTime = datetime.today().strftime('%Y-%m-%d-%Hh-%Mm-%Ss')
 
+SharedNotes = 'v2_Conv2DTranspose'
 if constants.use_unet:
     Notes = 'KITTI_Road_UNet'
 else:
     Notes = 'KITTI_Road'
+
+Notes = Notes + '_' + SharedNotes
 
 # build loss
 lossClass = modelLoss(0.001,0.85,640,192,args.batch)

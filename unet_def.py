@@ -63,19 +63,19 @@ def UNet(f4, f3, f2, f1, output_height, output_width, l1_skip_conn=True, n_class
     o = (Conv2D(512, (3, 3), padding='valid' , activation='relu' , data_format=IMAGE_ORDERING))(o)
     o = (BatchNormalization())(o)
 
-    o = (UpSampling2D((2, 2), data_format=IMAGE_ORDERING))(o)
+    o = (Conv2DTranspose(512, (2, 2), strides=(2, 2), data_format=IMAGE_ORDERING))(o)
     o = (concatenate([o, f3], axis=MERGE_AXIS))
     o = (ZeroPadding2D((1, 1), data_format=IMAGE_ORDERING))(o)
     o = (Conv2D(256, (3, 3), padding='valid', activation='relu' , data_format=IMAGE_ORDERING))(o)
     o = (BatchNormalization())(o)
 
-    o = (UpSampling2D((2, 2), data_format=IMAGE_ORDERING))(o)
+    o = (Conv2DTranspose(256, (2, 2), strides=(2, 2), data_format=IMAGE_ORDERING))(o)
     o = (concatenate([o, f2], axis=MERGE_AXIS))
     o = (ZeroPadding2D((1, 1), data_format=IMAGE_ORDERING))(o)
     o = (Conv2D(128, (3, 3), padding='valid' , activation='relu' , data_format=IMAGE_ORDERING))(o)
     o = (BatchNormalization())(o)
 
-    o = (UpSampling2D((2, 2), data_format=IMAGE_ORDERING))(o)
+    o = (Conv2DTranspose(128, (2, 2), strides=(2, 2), data_format=IMAGE_ORDERING))(o)
 
     if l1_skip_conn:
         o = (concatenate([o, f1], axis=MERGE_AXIS))
@@ -84,10 +84,14 @@ def UNet(f4, f3, f2, f1, output_height, output_width, l1_skip_conn=True, n_class
     o = (Conv2D(64, (3, 3), padding='valid', activation='relu', data_format=IMAGE_ORDERING))(o)
     o = (BatchNormalization())(o)
 
-    o = Conv2D(n_classes, (3, 3), padding='same',
-               data_format=IMAGE_ORDERING)(o)
+    o = Conv2D(n_classes, (3, 3), padding='same', data_format=IMAGE_ORDERING)(o)
 
-    o = (UpSampling2D((4,4), data_format=IMAGE_ORDERING))(o)
+    o = (Conv2DTranspose(64, (2, 2), strides=(2, 2), data_format=IMAGE_ORDERING))(o)
+    o = (ZeroPadding2D((1, 1), data_format=IMAGE_ORDERING))(o)
+    o = (Conv2D(32, (3, 3), padding='valid' , activation='relu' , data_format=IMAGE_ORDERING))(o)
+    o = (BatchNormalization())(o)
+
+    o = (Conv2DTranspose(2, (2, 2), strides=(2, 2), data_format=IMAGE_ORDERING))(o)
 
     # o = (Reshape((output_height*output_width, -1)))(o)
 

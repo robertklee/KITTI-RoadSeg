@@ -4,6 +4,7 @@ import numpy as np
 import scipy.misc
 import scipy.ndimage
 import sklearn.metrics
+
 umg=cv2.imread(r'C:\Users\xiuxi\Desktop\ECE470\data_road/uu_road_000084.png', cv2.IMREAD_UNCHANGED)
 ump=cv2.imread(r'C:\Users\xiuxi\Desktop\ECE470\data_road/uu_000084.png', cv2.IMREAD_UNCHANGED)
 img=umg[:,:,0]
