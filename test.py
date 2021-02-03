@@ -32,9 +32,9 @@ evaluation metrics for generated output
 '''
 
 # Default parameters
-model_epoch_number = 20#16
+model_epoch_number = 20
 resnet_type = 18
-session_id = 'KITTI_Road_UNet_Sun Aug 30 19_52_21 2020_batchsize_25_resnet_18'
+session_id = 'KITTI_Road_UNet_v2_Conv2DTranspose_2021-02-03-20h-46m-06s_batchsize_12_resnet_18'
 batchSize = 1
 model_epoch_base = '_weights_epoch'
 output_img_base_dir = 'output'
