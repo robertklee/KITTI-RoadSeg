@@ -38,7 +38,7 @@ The encoder was chosen to be a ResNet model because it allows us to train a deep
 Download ResNet V2 50 and VGG 16 from [Tensorflow's GitHub link](https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models) -->
 
 # Results
-The results of the model are available at: https://www.dropbox.com/s/hoxbbl20gql7f53/ECE%20470%20Final%20Report.pdf?dl=0
+The updated model results are not shown in the report, based on the previous model. The results of the previous model are available at: https://www.dropbox.com/s/hoxbbl20gql7f53/ECE%20470%20Final%20Report.pdf?dl=0
 TODO: embed images into README
 
 # Discussion
