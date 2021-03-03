@@ -71,11 +71,11 @@ Finally, issues were encountered with the various command line arguments that we
 # Future Work
 While the results of the model were strong, there remains work that can improve the results. The major item that will likely greatly improve results is implementing stronger loss functions based on the birds’ eye view metric discussed in Section IV.B: Performance Metric Types. This was not implemented in the first iteration of this model because the calculations require extensive debugging to translate it from normal Python into a language suitable for Keras Backend and TensorFlow. The operations that are available are limited, and not all calculations have a suitable mapping. By improving the loss function, the model can better tune the network parameters during backpropagation. A behaviour-based loss function also improves the results in a driving context.
 
-The current output has a jagged appearance because Upsample2D blocks were used in the decoder. This is a simple scaling of the image, and while it is efficient, it results in artifacts in the output. This is especially noticeable in the last layer, where a Upsample2D of 4x is used, and produces the scaling pixilation artifacts seen in the output. This block can be extended to multiple Upsample2D of 2x separated by convolution layers, which will likely reduce pixilation. 
+[COMPLETED] The current output has a jagged appearance because Upsample2D blocks were used in the decoder. This is a simple scaling of the image, and while it is efficient, it results in artifacts in the output. This is especially noticeable in the last layer, where a Upsample2D of 4x is used, and produces the scaling pixilation artifacts seen in the output. This block can be extended to multiple Upsample2D of 2x separated by convolution layers, which will likely reduce pixilation. 
 
-All of the Upsample2D blocks can also be changed to use a Conv2DTranspose. This also upsamples, but it uses a convolution kernel that is trainable, which can improve model performance.
+[COMPLETED] All of the Upsample2D blocks can also be changed to use a Conv2DTranspose. This also upsamples, but it uses a convolution kernel that is trainable, which can improve model performance.
 
-The decoder is fairly shallow, especially compared to the ResNet50 encoder backbone depth. This may mean we are losing details in the upsampling. We can increase the depth of the decoder to increase the number of trainable parameters, which may improve results. However, this may also lead to a decrease in performance, so this should be compared to the current result.
+[Partially Completed] The decoder is fairly shallow, especially compared to the ResNet50 encoder backbone depth. This may mean we are losing details in the upsampling. We can increase the depth of the decoder to increase the number of trainable parameters, which may improve results. However, this may also lead to a decrease in performance, so this should be compared to the current result.
 
 Finally, we can explore using better Keras metrics to evaluate the training of the model. For example, Mean Intersection-Over-Union may be used. This computes the IOU for each segmentation class and averages them and is a better metric for segmentation problems.
 
@@ -83,5 +83,6 @@ Finally, we can explore using better Keras metrics to evaluate the training of t
 - UNet Decoder has been updated with improved upscaling by using trainable `Conv2DTranspose` instead of `Upsampling2D` 
 
 # TODO
-- train and test should be repeated and split evenly across the three types
-- evaluation function
+- train and test should be repeated and split evenly across the three categories of images
+- data augmentation images should be repeated
+- evaluation function needs to be updated
