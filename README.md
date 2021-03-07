@@ -85,4 +85,8 @@ Finally, we can explore using better Keras metrics to evaluate the training of t
 # TODO
 - train and test should be repeated and split evenly across the three categories of images
 - data augmentation images should be repeated
-- evaluation function needs to be updated
+- evaluation function needs to be updated to assess model performance in one numeric value
+- ground truth label colours may not match those specified in `constants.py`
+- other road surfaces are specified by pure black (0,0,0) which I didn't notice
+- proper train/validation/test split using training set (since test labels are not provided)
+- more epochs?
