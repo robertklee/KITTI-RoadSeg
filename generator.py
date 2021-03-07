@@ -78,13 +78,13 @@ class segmentationGenerator(keras.utils.Sequence):
 
     def __getitem__(self, index):
         '''Generate one batch of data'''
-        outX  =  np.empty((self.batch_size,  *self.image_size, 3))
+        outX  =  np.empty((self.batch_size,  *self.image_size, constants.input_channels))
         if constants.use_unet:
-            outY  =  np.empty((self.batch_size,  *self.image_size, 2))
+            outY  =  np.empty((self.batch_size,  *self.image_size, constants.number_classes))
         else:
             outY  =  np.empty((self.batch_size,  *self.image_size, 3))
-        outY_0 = np.empty((self.batch_size, *self.image_size, 3))
-        outY_1 = np.empty((self.batch_size, *self.image_size, 3))
+        outY_0 = np.empty((self.batch_size, *self.image_size, constants.input_channels))
+        outY_1 = np.empty((self.batch_size, *self.image_size, constants.input_channels))
 
         imageNames = self.inputs[index*self.batch_size:(index+1)*self.batch_size]
 

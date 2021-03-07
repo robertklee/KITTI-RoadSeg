@@ -4,10 +4,12 @@ from enum import Enum
 # Parameters
 input_shape = (640,192,3)
 input_shape_full_size = (1024,320,3)#(1242, 374, 3)
+input_channels = input_shape[2]
 
 number_classes = 2
 
 road_color =        [255,0,255]
+other_road_surface_color = [0,0,0]
 background_color =  [255,0,0]
 
 system_files = '.DS_Store'
