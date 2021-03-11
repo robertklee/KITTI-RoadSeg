@@ -48,6 +48,7 @@ argparser = argparse.ArgumentParser(description='Testing')
 argparser.add_argument('-e',
                        '--epoch',
                        default=model_epoch_number,
+                       type=int,
                        help='model epoch number')
 argparser.add_argument('-s',
                        '--session',
@@ -55,31 +56,29 @@ argparser.add_argument('-s',
                        help='session id number')
 argparser.add_argument('-b',
                        '--batch',
+                       type=int,
                        default=batchSize,
                        help='batch size')
 argparser.add_argument('-r',
                        '--resnet',
                        default=resnet_type,
+                       type=int,
                        help='resnet type')
 argparser.add_argument('-v',
                        '--visualize',
                        default=visualize_default,
+                       type=bool,
                        help='enable visualize')
 argparser.add_argument('-t',
                        '--test',
                        default=use_test_images_default,
+                       type=bool,
                        help='use test images')
 
 args = argparser.parse_args()
 
-# convert string arguments to appropriate type
-if type(args.visualize) is not bool:
-    args.visualize = args.visualize == '1' or args.visualize.lower() == 'true'
-args.epochs = int(args.epoch)
-args.batch = int(args.batch)
-args.resnet = constants.EncoderType(int(args.resnet))
-if type(args.test) is not bool:
-    args.test = args.test == '1' or args.test.lower() == 'true'
+# convert to enum
+args.resnet = constants.EncoderType(args.resnet)
 
 src_type = 'test' if args.test else 'train'
 eval_image_input_path = constants.data_test_image_dir if args.test else constants.data_train_image_dir

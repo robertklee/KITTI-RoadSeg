@@ -42,21 +42,23 @@ argparser = argparse.ArgumentParser(description='Training')
 argparser.add_argument('-e',
                        '--epochs',
                        default=DEFAULT_EPOCHS,
+                       type=int,
                        help='number of epochs')
 argparser.add_argument('-b',
                        '--batch',
                        default=DEFAULT_BATCH_SIZE,
+                       type=int,
                        help='batch size')
 argparser.add_argument('-r',
                        '--resnet',
                        default=resnet_type,
+                       type=int,
                        help='resnet type')
 
-# convert string arguments to appropriate type
 args = argparser.parse_args()
-args.epochs = int(args.epochs)
-args.batch = int(args.batch)
-args.resnet = constants.EncoderType(int(args.resnet))
+
+# convert to enum
+args.resnet = constants.EncoderType(args.resnet)
 
 print("\nTensorFlow detected the following GPU(s):")
 tf.test.gpu_device_name()
