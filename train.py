@@ -89,11 +89,12 @@ test_generator = segmentationGenerator(constants.data_train_image_dir, constants
 model = create_Model(input_shape=(640,192,3), encoder_type=args.resnet)
 model.compile(optimizer=Adam(lr=1e-3),loss=loss, metrics=[loss, 'accuracy'])
 
-modelSavePath = 'models/' + Notes + '_' + trainingRunTime +  '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value) + '/_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5'
+modelSaveDir = os.path.join('models', Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value))
+modelSavePath = os.path.join(modelSaveDir, '_weights_epoch{epoch:02d}_val_loss_{val_loss:.4f}_train_loss_{loss:.4f}.hdf5')
 
 # callbacks
-if not os.path.exists('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value) + '/'):
-    os.makedirs('models/' + Notes + '_' + trainingRunTime + '_batchsize_' + str(args.batch) + '_resnet_' + str(args.resnet.value) + '/')
+if not os.path.exists(modelSaveDir):
+    os.makedirs(modelSaveDir)
 mc = ModelCheckpoint(modelSavePath, monitor='val_loss')
 mc1 = ModelCheckpoint(modelSavePath, monitor='loss')
 rl = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=2, verbose=1) # not used
