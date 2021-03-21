@@ -1,6 +1,6 @@
 Keras==2.3.1
 tensorboard==1.15.0
-tensorflow==1.15.2
+tensorflow==2.4.0
 opencv-contrib-python==4.4.0.42
 opencv-python==4.4.0.42
 matplotlib
